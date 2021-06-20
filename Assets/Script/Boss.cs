@@ -20,19 +20,42 @@ public class Boss : MonoBehaviour
     
     [SerializeField]
     private float speed = 0.1f;
+    [SerializeField]
     private float oneShoting = 0.5f;
+    [SerializeField]
+    private float testfloat = 0.5f;
+    [SerializeField]
+    private float testfloat2 = 0.5f;
 
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
 
+        //StartCoroutine(TestPtern());
         StartCoroutine(PatternA());
         //StartCoroutine(PatternB());
         //StartCoroutine(PatternC());
     }
     void Update()
     {
+        
+    }
+    private IEnumerator TestPtern()
+    {
+        
+        while(true)  
+        {
+            GameObject bullet = null;
+            for(int i = 0; i < oneShoting; i++)
+        {
+                bullet = Fire(bullet);
+                bullet.transform.position = bulletPosition.position;
+                bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(speed * Mathf.Cos(Mathf.PI * 2 * i / oneShoting ), speed * Mathf.Sin(Mathf.PI * i * 2 / oneShoting )));
+                bullet.transform.Rotate(new Vector3(0f, 0f, 360 * i / oneShoting - 90));
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
         
     }
     private void Phase_1()
@@ -44,8 +67,10 @@ public class Boss : MonoBehaviour
         if(collision.tag == "Bullet")
         {
             collision.gameObject.SetActive(false);
+            collision.gameObject.transform.SetParent(gameManager.PoolManager.transform, false);
+            HpBar.value -= 0.5f;
         }
-        HpBar.value -= 0.2f;   
+        
     }
     private IEnumerator PatternA()
     {

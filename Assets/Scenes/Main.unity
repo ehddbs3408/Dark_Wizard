@@ -910,6 +910,9 @@ MonoBehaviour:
   pos1: {fileID: 645022049}
   HpBar: {fileID: 437713287}
   speed: 100
+  oneShoting: 10
+  testfloat: 1
+  testfloat2: 1
 --- !u!58 &713187475
 CircleCollider2D:
   m_ObjectHideFlags: 0

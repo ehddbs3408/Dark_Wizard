@@ -32,9 +32,14 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         Move();
     }
-
+    private void I_am_mujung()
+    {
+        
+        //if(Input.GetKeyDown(KeyCode()))
+    }
     private void Move()
     {
         if (Input.GetMouseButton(0))
