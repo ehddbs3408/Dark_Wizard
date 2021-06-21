@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour
     private Sprite[] sprites = null;
     [SerializeField]
     private float speed = 0.5f;
+    
     // Start is called before the first frame update
     private void Awake()
     {
@@ -42,8 +43,9 @@ public class Bullet : MonoBehaviour
         {
             Despawn();
         }
+        
     }
-    private void Despawn()
+    public void Despawn()
     {
         gameObject.SetActive(false);
         transform.SetParent(gameManager.PoolManager.transform, false);
@@ -53,6 +55,7 @@ public class Bullet : MonoBehaviour
         spriteRenderer.sprite = sprites[cat];
         if (cat == 1)
         {
+            gameObject.tag = "Bullet";
             transform.eulerAngles = new Vector3(transform.rotation.x, transform.rotation.y, 0f);
             speed = 20f;
             gameObject.layer = 6;
@@ -60,10 +63,11 @@ public class Bullet : MonoBehaviour
 
         else
         {
+            gameObject.tag = "Bullet_E";
             gameObject.layer = 7;
             speed = 0;
         }
-
     }
+    
 
 }

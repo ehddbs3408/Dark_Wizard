@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     private float speed = 0.5f;
     [SerializeField]
     private float firelate = 0.5f;
+    private bool im = false;
 
     private bool isDead = false;
     
@@ -32,13 +33,16 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        I_am();
         Move();
     }
-    private void I_am_mujung()
+    private void I_am()
     {
         
-        //if(Input.GetKeyDown(KeyCode()))
+        if(Input.GetKey("h"))
+        {
+            im = true;
+        }
     }
     private void Move()
     {
@@ -86,6 +90,7 @@ public class Player : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (im) return;
         if (isDead) return;
         gameManager.Dead();
         isDead = true;

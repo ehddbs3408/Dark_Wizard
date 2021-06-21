@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public Vector2 MaxPosition { get; private set; }
     public Vector2 MinPosition { get; private set; }
     public PoolManager PoolManager { get; private set; }
+    [SerializeField]
+    private Text textScore = null;
+    private int score = 0;
     private int life = 3;
     private SpriteRenderer spriteRenderer = null;
     [SerializeField]
@@ -31,5 +34,10 @@ public class GameManager : MonoBehaviour
             return;
         }
         playerHp[life].color = new Color(1, 1, 1, 0);
+    }
+    public void AddScore(int addsocre)
+    {
+        score += addsocre;
+        textScore.text = string.Format("Score\n{0}", score);
     }
 }
