@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
         I_am();
         Move();
     }
+    
     private void I_am()
     {
         
@@ -74,12 +75,15 @@ public class Player : MonoBehaviour
             result.transform.SetParent(null);
             Bullet bm = result.GetComponent<Bullet>();
             bm.SetSprite(1);
-
             result.SetActive(true);
         }
         else
         {
             result = Instantiate(bulletPrefab, bulletPosition);
+            result.SetActive(false);
+            Bullet bm = result.GetComponent<Bullet>();
+            bm.SetSprite(1);
+            result.SetActive(true);
         }
         if (result != null)
         {
@@ -94,9 +98,9 @@ public class Player : MonoBehaviour
         if (isDead) return;
         gameManager.Dead();
         isDead = true;
-        StartCoroutine(Dead());
+        StartCoroutine(Damaged());
     }
-    private IEnumerator Dead()
+    private IEnumerator Damaged()
     {
         
         for(int i =0;i<5;i++)

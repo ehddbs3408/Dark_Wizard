@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Boss : MonoBehaviour
+public class Boss : GameManager
 {
     
     [SerializeField]
     private GameObject bulletPrefab = null;
+    [SerializeField]
+    private GameObject EnemyPrefab = null;
     [SerializeField]
     private Transform targetPosition= null;
     [SerializeField]
@@ -15,11 +17,8 @@ public class Boss : MonoBehaviour
     [SerializeField]
     private Transform pos1 = null;
     private GameManager gameManager = null;
-    private Bullet bulletMove = null;
     [SerializeField]
     private Slider HpBar = null;
-    [SerializeField]
-    private Sprite[] bulletSprite = null; 
 
     [SerializeField]
     private float moveSpeed = 0.1f;
@@ -29,44 +28,58 @@ public class Boss : MonoBehaviour
     private float speed = 0.1f;
     [SerializeField]
     private float oneShoting = 0.5f;
-    [SerializeField]
-    private bool isPhase = true;
+    private bool isPhase = false;
     
 
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        bulletMove = FindObjectOfType<Bullet>();
+
         
         //StartCoroutine(TestPtern());
-        StartCoroutine(PatternA());
+        //StartCoroutine(PatternA());
         //StartCoroutine(PatternB());
         //StartCoroutine(PatternC());
+        StartCoroutine(PatternE());
     }
     void Update()
     {
-        Phase_2();
-        //float x = Mathf.Cos(Time.time *1) * 2;
-        //float y = Mathf.Sin(Time.time *2) * 1;
-        //transform.position = new Vector3(x, y + 2.5f, 0);
+        Phase_star();
     }
-    //private IEnumerator TestPtern()
-    
-    private void Phase_1()
+    protected override void AddScore(int addsocre)
     {
-
+        base.AddScore(addsocre);
     }
-    private void Phase_2()
+    private void Phase_star()
     {
-        if (HpBar.value > 0) return;
-        GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
-        for(int i =0;i<obj.Length;i++)
+        
+        if (HpBar.value <= 0)
         {
-            obj[i].GetComponent<Bullet>().Despawn();
+            Debug.Log("asd");
+            isPhase = true;
+            GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
+            for (int i = 0; i < obj.Length; i++)
+            {
+                StartCoroutine(obj[i].GetComponent<Bullet>().Srali());
+            }
+            while (HpBar.value < 100)
+            {
+                HpBar.value += 0.1f;
+            }
+            StartCoroutine(PatternD());
+        }
+        if(isPhase)
+        {
+            Phase_2Move();
         }
     }
-
+    private void Phase_2Move()
+    {
+        float x = Mathf.Cos(Time.time * 1) * 2;
+        float y = Mathf.Sin(Time.time *2) * 1;
+        transform.position = new Vector3(x, y + 2.5f, 0);
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Bullet")
@@ -74,8 +87,7 @@ public class Boss : MonoBehaviour
             collision.gameObject.SetActive(false);
             collision.gameObject.transform.SetParent(gameManager.PoolManager.transform, false);
             HpBar.value -= 0.5f;
-            gameManager.AddScore(10);
-            isPhase = false;
+            AddScore(10);
         }
         
     }
@@ -89,15 +101,18 @@ public class Boss : MonoBehaviour
         yield return new WaitForSeconds(2f);
         while (a<3)
         {
-            if (isPhase) break;
+            if (isPhase)
+            {
+                yield break;
+            }
             randomX = Random.Range(-1.7f, 1.7f);
             randomY = Random.Range(1, 4f);
             GameObject bullet = null;
-            CircleFire(bullet, 30, 0,bulletPosition);
+            CircleFire(bullet, 30, 0,bulletPosition,0);
             StartCoroutine(MoveTo(gameObject, new Vector3(randomX, randomY, 0)));
             for (int i = 0;i<15;i++)
             {
-                bullet = Fire(bullet);
+                bullet = Fire(bullet,0);
                 dir = targetPosition.position - bullet.transform.position;
                 bullet.GetComponent<Rigidbody2D>().AddForce(dir * speed);
                 yield return new WaitForSeconds(0.3f);
@@ -116,15 +131,17 @@ public class Boss : MonoBehaviour
         oneShoting = 40;
         while (a<40)
         {
-            if (isPhase) break;
+            if (isPhase)
+            {
+                yield break;
+            }
             if (one >360)
             {
                 one = 10;
             }
             float angle = 360 / oneShoting;
             GameObject bullet = null;
-            CircleFire(bullet, oneShoting, one, bulletPosition);
-            
+            CircleFire(bullet, oneShoting, one, bulletPosition,2);
             one += 10;
             a++;
             yield return new WaitForSeconds(0.3f);
@@ -141,15 +158,19 @@ public class Boss : MonoBehaviour
         GameObject bullet = null;
         while (a<20)
         {
-            if (isPhase) break;
+            if (isPhase)
+            {
+                
+                yield break;
+            }
             if (one > 360)
             {
                 one = 20;
             }
             pos1.position = new Vector3(-1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1);
+            CircleFire(bullet, oneShoting, one, pos1,2);
             pos1.position = new Vector3(1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1);
+            CircleFire(bullet, oneShoting, one, pos1,2);
             yield return new WaitForSeconds(0.3f);
             one += 20;
             a++;
@@ -158,50 +179,62 @@ public class Boss : MonoBehaviour
         oneShoting = 40;
         while (a < 10)
         {
+            if (isPhase)
+            {
 
+                yield break;
+            }
             if (one > 360)
             {
                 one = 5;
             }
             pos1.position = new Vector3(-1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1);
+            CircleFire(bullet, oneShoting, one, pos1,2);
             pos1.position = new Vector3(1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1);
+            CircleFire(bullet, oneShoting, one, pos1,2);
             yield return new WaitForSeconds(0.3f);
             one += 5;
             a++;
         }
 
     }
-    private IEnumerator PternD()
+    private IEnumerator PatternD()
     {
         GameObject bullet = null;
         Vector2 dir = new Vector2(0, 0);
+
+        yield return new WaitForSeconds(2f);
         while (true)
         {
-
-
+            if (isPhase == false) continue; 
             float x = Mathf.Cos(Time.time * moveSpeed) * moveArea;
             float y = Mathf.Sin(Time.time * moveSpeed) * moveArea;
-            bullet = Fire(bullet);
-            Debug.Log(x); Debug.Log(y);
+            bullet = Fire(bullet,0);
             bullet.transform.position = new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z);
             dir = targetPosition.position - bullet.transform.position;
             bullet.GetComponent<Rigidbody2D>().AddForce(dir * speed);
             yield return new WaitForSeconds(0.1f);
         }
     }
-    private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition)
+    private IEnumerator PatternE()
+    {
+        isPhase = false;
+        StartCoroutine(MoveTo(gameObject, new Vector3(0f, 3.7f, 0)));
+        yield return new WaitForSeconds(1f);
+        GameObject prefab = Instantiate(EnemyPrefab, bulletPosition);
+        StartCoroutine(MoveTo(prefab, new Vector3(0f, 0f, 0f)));
+    }
+    private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a)
     {
         for (int i = 0; i < oneShoting; i++)
         {
-            bullet = Fire(bullet);
+            bullet = Fire(bullet,a);
             bullet.transform.position = bulletPosition.position;
             bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(speed * Mathf.Cos(Mathf.PI * 2 * i / oneShoting + one), speed * Mathf.Sin(Mathf.PI * i * 2 / oneShoting + one)));
             bullet.transform.Rotate(new Vector3(0f, 0f, 360 * i / oneShoting - 90));
         }
     }
-    private GameObject Fire(GameObject bullet)
+    private GameObject Fire(GameObject bullet,int a)
     {
         if (gameManager.PoolManager.transform.childCount > 0)
         {
@@ -209,13 +242,17 @@ public class Boss : MonoBehaviour
             bullet.transform.position = bulletPosition.position;
             bullet.transform.SetParent(null);
             Bullet bm = bullet.GetComponent<Bullet>();
-            bm.SetSprite(0);
+            bm.SetSprite(a);
             bullet.SetActive(true);
 
         }
         else
         {
             bullet = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity);
+            bullet.SetActive(false);
+            Bullet bm = bullet.GetComponent<Bullet>();
+            bm.SetSprite(a);
+            bullet.SetActive(true);
         }
         if (bullet != null)
         {
@@ -241,5 +278,4 @@ public class Boss : MonoBehaviour
             yield return null;
         }
     }
-    
 }

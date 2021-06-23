@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         }
         playerHp[life].color = new Color(1, 1, 1, 0);
     }
-    public void AddScore(int addsocre)
+    protected virtual void AddScore(int addsocre)
     {
         score += addsocre;
         textScore.text = string.Format("Score\n{0}", score);

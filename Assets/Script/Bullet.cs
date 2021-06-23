@@ -6,17 +6,19 @@ public class Bullet : MonoBehaviour
 { 
     private SpriteRenderer spriteRenderer = null;
     private GameManager gameManager = null;
+    private Animator ani = null;
 
     [SerializeField]
     private Sprite[] sprites = null;
     [SerializeField]
-    private float speed = 0.5f;
+    protected float speed = 0.5f;
     
     // Start is called before the first frame update
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        ani = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -25,7 +27,7 @@ public class Bullet : MonoBehaviour
         transform.Translate(Vector2.up * speed * Time.deltaTime);
         CheckLimit();
     }
-    private void CheckLimit()
+    protected virtual void CheckLimit()
     {
         if (transform.position.y > gameManager.MaxPosition.y + 2f)
         {
@@ -45,7 +47,13 @@ public class Bullet : MonoBehaviour
         }
         
     }
-    public void Despawn()
+    public IEnumerator Srali()
+    {
+        ani.Play("Destoy");
+        yield return new WaitForSeconds(0.54f);
+        Despawn();
+    }
+    protected virtual void Despawn()
     {
         gameObject.SetActive(false);
         transform.SetParent(gameManager.PoolManager.transform, false);
@@ -53,6 +61,7 @@ public class Bullet : MonoBehaviour
     public void SetSprite(int cat)
     {
         spriteRenderer.sprite = sprites[cat];
+       
         if (cat == 1)
         {
             gameObject.tag = "Bullet";
@@ -60,13 +69,15 @@ public class Bullet : MonoBehaviour
             speed = 20f;
             gameObject.layer = 6;
         }
-
         else
         {
+            transform.eulerAngles = new Vector3(transform.rotation.x, transform.rotation.y, 0f);
             gameObject.tag = "Bullet_E";
             gameObject.layer = 7;
             speed = 0;
         }
+            
+       
     }
     
 
