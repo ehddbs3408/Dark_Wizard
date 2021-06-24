@@ -9,20 +9,33 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Transform bulletPosition = null;
     private GameManager gameManager = null;
-
+    private SpriteRenderer spriteRenderer = null;
+    [SerializeField]
+    private int hp = 100;
     [SerializeField]
     private float speed = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(Shotting());
         gameManager = FindObjectOfType<GameManager>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        StartCoroutine(Shotting());
+        
     }
     void Update()
     {
         transform.Rotate(new Vector3(transform.rotation.x, transform.rotation.y, 53 * Time.deltaTime));
     }
-    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Bullet")
+        {
+            collision.gameObject.SetActive(false);
+            collision.gameObject.transform.SetParent(gameManager.PoolManager.transform, false);
+            StartCoroutine(Damaged());
+            hp--;
+        }
+    }
     private IEnumerator Shotting()
     {
         GameObject bullet = null;
@@ -43,7 +56,7 @@ public class Enemy : MonoBehaviour
                 bullet.transform.Rotate(new Vector3(0f, 0f, 360 * i / oneShoting - 90));
             }
             one+=0.1f;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.08f);
         }
         
     }
@@ -72,5 +85,15 @@ public class Enemy : MonoBehaviour
             bullet.transform.SetParent(null);
         }
         return bullet;
+    }
+    private IEnumerator Damaged()
+    {
+        if(hp <=0)
+        {
+            gameObject.SetActive(false);
+        }
+        spriteRenderer.color = new Color(0, 0, 0, 0);
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = new Color(1, 1, 1, 1);
     }
 }

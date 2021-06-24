@@ -9,7 +9,9 @@ public class Boss : GameManager
     [SerializeField]
     private GameObject bulletPrefab = null;
     [SerializeField]
-    private GameObject EnemyPrefab = null;
+    private GameObject enemyPrefab = null;
+    [SerializeField]
+    private GameObject laserObject = null;
     [SerializeField]
     private Transform targetPosition= null;
     [SerializeField]
@@ -19,7 +21,9 @@ public class Boss : GameManager
     private GameManager gameManager = null;
     [SerializeField]
     private Slider HpBar = null;
-
+    [SerializeField]
+    private float damaged = 0.5f;
+    
     [SerializeField]
     private float moveSpeed = 0.1f;
     [SerializeField]
@@ -29,19 +33,20 @@ public class Boss : GameManager
     [SerializeField]
     private float oneShoting = 0.5f;
     private bool isPhase = false;
-    
-
+    private bool isPhase2 = false;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
 
-        
+
         //StartCoroutine(TestPtern());
-        //StartCoroutine(PatternA());
+        StartCoroutine(PatternA());
         //StartCoroutine(PatternB());
         //StartCoroutine(PatternC());
-        StartCoroutine(PatternE());
+        //StartCoroutine(PatternD());
+        //StartCoroutine(PatternE());
+        //StartCoroutine(PatternF());
     }
     void Update()
     {
@@ -56,7 +61,10 @@ public class Boss : GameManager
         
         if (HpBar.value <= 0)
         {
-            Debug.Log("asd");
+            if(isPhase2)
+            {
+
+            }
             isPhase = true;
             GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
             for (int i = 0; i < obj.Length; i++)
@@ -68,11 +76,14 @@ public class Boss : GameManager
                 HpBar.value += 0.1f;
             }
             StartCoroutine(PatternD());
+            damaged = 0.25f;
+            isPhase2 = true;
         }
         if(isPhase)
         {
             Phase_2Move();
         }
+
     }
     private void Phase_2Move()
     {
@@ -86,7 +97,7 @@ public class Boss : GameManager
         {
             collision.gameObject.SetActive(false);
             collision.gameObject.transform.SetParent(gameManager.PoolManager.transform, false);
-            HpBar.value -= 0.5f;
+            HpBar.value -= damaged;
             AddScore(10);
         }
         
@@ -108,7 +119,7 @@ public class Boss : GameManager
             randomX = Random.Range(-1.7f, 1.7f);
             randomY = Random.Range(1, 4f);
             GameObject bullet = null;
-            CircleFire(bullet, 30, 0,bulletPosition,0);
+            CircleFire(bullet, 30, 0,bulletPosition,0,speed);
             StartCoroutine(MoveTo(gameObject, new Vector3(randomX, randomY, 0)));
             for (int i = 0;i<15;i++)
             {
@@ -141,7 +152,7 @@ public class Boss : GameManager
             }
             float angle = 360 / oneShoting;
             GameObject bullet = null;
-            CircleFire(bullet, oneShoting, one, bulletPosition,2);
+            CircleFire(bullet, oneShoting, one, bulletPosition,2,speed);
             one += 10;
             a++;
             yield return new WaitForSeconds(0.3f);
@@ -168,9 +179,9 @@ public class Boss : GameManager
                 one = 20;
             }
             pos1.position = new Vector3(-1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1,2);
+            CircleFire(bullet, oneShoting, one, pos1,2,speed);
             pos1.position = new Vector3(1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1,2);
+            CircleFire(bullet, oneShoting, one, pos1,2,speed);
             yield return new WaitForSeconds(0.3f);
             one += 20;
             a++;
@@ -189,22 +200,23 @@ public class Boss : GameManager
                 one = 5;
             }
             pos1.position = new Vector3(-1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1,2);
+            CircleFire(bullet, oneShoting, one, pos1,2,speed);
             pos1.position = new Vector3(1.5f, 3.7f, 0);
-            CircleFire(bullet, oneShoting, one, pos1,2);
+            CircleFire(bullet, oneShoting, one, pos1,2,speed);
             yield return new WaitForSeconds(0.3f);
             one += 5;
             a++;
         }
-
+        yield return new WaitForSeconds(3f);
+        StartCoroutine(PatternA());
     }
     private IEnumerator PatternD()
     {
         GameObject bullet = null;
         Vector2 dir = new Vector2(0, 0);
-
+        int a = 0;
         yield return new WaitForSeconds(2f);
-        while (true)
+        while (a <100)
         {
             if (isPhase == false) continue; 
             float x = Mathf.Cos(Time.time * moveSpeed) * moveArea;
@@ -214,23 +226,82 @@ public class Boss : GameManager
             dir = targetPosition.position - bullet.transform.position;
             bullet.GetComponent<Rigidbody2D>().AddForce(dir * speed);
             yield return new WaitForSeconds(0.1f);
+            a++;
         }
+        StartCoroutine(PatternE());
+        yield return new WaitForSeconds(20f);
+        
     }
     private IEnumerator PatternE()
     {
         isPhase = false;
-        StartCoroutine(MoveTo(gameObject, new Vector3(0f, 3.7f, 0)));
+        StartCoroutine(MoveTo(gameObject, new Vector3(0f, 4.2f, 0)));
         yield return new WaitForSeconds(1f);
-        GameObject prefab = Instantiate(EnemyPrefab, bulletPosition);
+        GameObject prefab = Instantiate(enemyPrefab, bulletPosition);
         StartCoroutine(MoveTo(prefab, new Vector3(0f, 0f, 0f)));
+        yield return new WaitForSeconds(10f);
+        StartCoroutine(PatternF());
     }
-    private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a)
+    private IEnumerator PatternF()
+    {
+        int a = 0;
+        int b = 0;
+        float randomX = 0f;
+        float randomY = 0f;
+        int randPattern = Random.Range(1, 2);
+
+        GameObject bullet =null;
+        while (a<4)
+        {
+            randomX = Random.Range(-1.3f, 1.3f);
+            randomY = Random.Range(-2.5f, 2.5f);
+            StartCoroutine(MoveTo(gameObject, new Vector3(randomX, randomY, 0)));
+            laserObject.GetComponent<Collider2D>().enabled = false;
+            laserObject.GetComponent<SpriteRenderer>().enabled = true;
+            for (int i=0;i<3;i++)
+            {
+                laserObject.GetComponent<Magic>().Changesprite(1);
+                yield return new WaitForSeconds(0.1f);
+                laserObject.GetComponent<Magic>().Changesprite(0);
+                yield return new WaitForSeconds(0.1f);
+            }
+            laserObject.GetComponent<Magic>().Changesprite(2);
+            laserObject.GetComponent<Collider2D>().enabled = true;
+            for (int i = 0;i<5;i++)
+            {
+                CircleFire(bullet, 25, b, bulletPosition, 0,130);
+                b += 10;
+                yield return new WaitForSeconds(0.2f);
+            }
+            
+            yield return new WaitForSeconds(2f);
+            a++;
+        }
+        laserObject.GetComponent<Collider2D>().enabled = false;
+        laserObject.GetComponent<SpriteRenderer>().enabled = true;
+        if (randPattern==1)
+        {
+            isPhase = true;
+            StartCoroutine(PatternD());
+        }
+        else
+        {
+            StartCoroutine(PatternE());
+        }
+        
+        
+    }
+    private IEnumerator GameEnd()
+    {
+        yield return new WaitForSeconds(1f);
+    }
+    private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a,float addspeed)
     {
         for (int i = 0; i < oneShoting; i++)
         {
             bullet = Fire(bullet,a);
             bullet.transform.position = bulletPosition.position;
-            bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(speed * Mathf.Cos(Mathf.PI * 2 * i / oneShoting + one), speed * Mathf.Sin(Mathf.PI * i * 2 / oneShoting + one)));
+            bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(addspeed * Mathf.Cos(Mathf.PI * 2 * i / oneShoting + one), addspeed * Mathf.Sin(Mathf.PI * i * 2 / oneShoting + one)));
             bullet.transform.Rotate(new Vector3(0f, 0f, 360 * i / oneShoting - 90));
         }
     }

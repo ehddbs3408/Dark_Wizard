@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bullet
   - Bullet_E
+  - Bullet_Lager
   layers:
   - Default
   - TransparentFX

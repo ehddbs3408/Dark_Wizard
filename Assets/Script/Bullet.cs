@@ -20,6 +20,10 @@ public class Bullet : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         ani = GetComponent<Animator>();
     }
+    private void Start()
+    {
+        
+    }
 
     // Update is called once per frame
     void Update()

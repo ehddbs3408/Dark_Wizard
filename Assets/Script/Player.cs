@@ -89,13 +89,12 @@ public class Player : MonoBehaviour
         {
             result.transform.SetParent(null);
         }
-
-
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (im) return;
         if (isDead) return;
+        Debug.Log("asd");
         gameManager.Dead();
         isDead = true;
         StartCoroutine(Damaged());

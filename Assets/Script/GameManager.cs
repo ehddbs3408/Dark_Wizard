@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         PoolManager = FindObjectOfType<PoolManager>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         MaxPosition = new Vector2(2.5f, 4.5f);
         MinPosition = new Vector2(-2.5f, -5f);
     }
