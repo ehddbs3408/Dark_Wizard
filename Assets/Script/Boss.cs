@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class Boss : GameManager
 {
     
+    private Animator ani = null;
+    private GameManager gameManager = null;
     [SerializeField]
     private GameObject bulletPrefab = null;
     [SerializeField]
@@ -18,7 +20,6 @@ public class Boss : GameManager
     private Transform bulletPosition = null;
     [SerializeField]
     private Transform pos1 = null;
-    private GameManager gameManager = null;
     [SerializeField]
     private Slider HpBar = null;
     [SerializeField]
@@ -33,20 +34,20 @@ public class Boss : GameManager
     [SerializeField]
     private float oneShoting = 0.5f;
     private bool isPhase = false;
+    private bool isMove = false;
     private bool isPhase2 = false;
+    private int time = 0;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        ani = GetComponent<Animator>();
 
 
-        //StartCoroutine(TestPtern());
+
+        //StartCoroutine(End());
+        StartCoroutine(AddTimeScore(0));
         StartCoroutine(PatternA());
-        //StartCoroutine(PatternB());
-        //StartCoroutine(PatternC());
-        //StartCoroutine(PatternD());
-        //StartCoroutine(PatternE());
-        //StartCoroutine(PatternF());
     }
     void Update()
     {
@@ -56,31 +57,40 @@ public class Boss : GameManager
     {
         base.AddScore(addsocre);
     }
+    protected override void GameEnd()
+    {
+        base.GameEnd();
+    }
     private void Phase_star()
     {
-        
         if (HpBar.value <= 0)
         {
-            if(isPhase2)
+            if (isPhase2==false&&isPhase==true)
             {
-
+                isPhase2 = true;
+                GameEnd();
             }
+            isMove = true;
             isPhase = true;
             GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
             for (int i = 0; i < obj.Length; i++)
             {
                 StartCoroutine(obj[i].GetComponent<Bullet>().Srali());
+                AddScore(5);
             }
             while (HpBar.value < 100)
             {
                 HpBar.value += 0.1f;
             }
             StartCoroutine(PatternD());
-            damaged = 0.25f;
-            isPhase2 = true;
+            StartCoroutine(AddTimeScore(1));
+                damaged -= 0.15f;
+                
+            
         }
-        if(isPhase)
+        if(isMove)
         {
+            
             Phase_2Move();
         }
 
@@ -224,7 +234,7 @@ public class Boss : GameManager
             bullet = Fire(bullet,0);
             bullet.transform.position = new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z);
             dir = targetPosition.position - bullet.transform.position;
-            bullet.GetComponent<Rigidbody2D>().AddForce(dir * speed);
+            bullet.GetComponent<Rigidbody2D>().AddForce(dir * 50);
             yield return new WaitForSeconds(0.1f);
             a++;
         }
@@ -234,10 +244,11 @@ public class Boss : GameManager
     }
     private IEnumerator PatternE()
     {
-        isPhase = false;
+        isMove = false;
         StartCoroutine(MoveTo(gameObject, new Vector3(0f, 4.2f, 0)));
         yield return new WaitForSeconds(1f);
         GameObject prefab = Instantiate(enemyPrefab, bulletPosition);
+        prefab.transform.SetParent(null);
         StartCoroutine(MoveTo(prefab, new Vector3(0f, 0f, 0f)));
         yield return new WaitForSeconds(10f);
         StartCoroutine(PatternF());
@@ -248,7 +259,9 @@ public class Boss : GameManager
         int b = 0;
         float randomX = 0f;
         float randomY = 0f;
-        int randPattern = Random.Range(1, 2);
+        int randPattern = 0;
+        randPattern = Random.Range(1, 2);
+
 
         GameObject bullet =null;
         while (a<4)
@@ -278,10 +291,10 @@ public class Boss : GameManager
             a++;
         }
         laserObject.GetComponent<Collider2D>().enabled = false;
-        laserObject.GetComponent<SpriteRenderer>().enabled = true;
+        laserObject.GetComponent<SpriteRenderer>().enabled = false;
         if (randPattern==1)
         {
-            isPhase = true;
+            isMove = true;
             StartCoroutine(PatternD());
         }
         else
@@ -290,10 +303,6 @@ public class Boss : GameManager
         }
         
         
-    }
-    private IEnumerator GameEnd()
-    {
-        yield return new WaitForSeconds(1f);
     }
     private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a,float addspeed)
     {
@@ -348,5 +357,54 @@ public class Boss : GameManager
             }
             yield return null;
         }
+    }
+    private IEnumerator AddTimeScore(int a)
+    {
+        time = 0;
+        while(true)
+        {
+            if(isPhase == true&&a==0)
+            {
+                if (time < 50)
+                {
+                    if (time < 40)
+                    {
+                        if (time < 35)
+                        {
+                            AddScore(1500);
+                            yield break;
+                        }
+                        AddScore(1000);
+                        yield break;
+                    }
+                    AddScore(500);
+                    yield break;
+                }
+                yield break;
+            }
+            if(isPhase2==true&&a==1)
+            {
+                if (time < 105)
+                {
+                    if (time < 95)
+                    {
+                        if (time < 85)
+                        {
+                            AddScore(3000);
+                            yield break;
+                        }
+                        AddScore(2000);
+                        yield break;
+                    }
+                    AddScore(1000);
+                    yield break;
+                }
+                yield break;
+            }
+            yield return new WaitForSeconds(1f);
+            time++;
+            Debug.Log(time);
+        }
+        
     }
 }

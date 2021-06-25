@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     private Transform bulletPosition = null;
     [SerializeField]
     private GameObject bulletPrefab = null;
+    [SerializeField]
+    private AudioClip clip;
     private Vector3 targetPosition = Vector3.zero;
     private GameManager gameManager = null;
     private SpriteRenderer spriteRenderer;
@@ -35,6 +37,8 @@ public class Player : MonoBehaviour
     {
         I_am();
         Move();
+
+        
     }
     
     private void I_am()
@@ -53,7 +57,6 @@ public class Player : MonoBehaviour
             targetPosition.x = Mathf.Clamp(targetPosition.x, gameManager.MinPosition.x, gameManager.MaxPosition.x);
             targetPosition.y = Mathf.Clamp(targetPosition.y, gameManager.MinPosition.y, gameManager.MaxPosition.y);
             transform.localPosition = Vector2.MoveTowards(transform.localPosition, targetPosition, speed * Time.deltaTime);
-
         }
     }
     private IEnumerator Fire()
@@ -94,6 +97,7 @@ public class Player : MonoBehaviour
     {
         if (im) return;
         if (isDead) return;
+        SoundManager.instance.SFXPlay("DAMAG", clip);
         Debug.Log("asd");
         gameManager.Dead();
         isDead = true;

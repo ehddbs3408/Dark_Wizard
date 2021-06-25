@@ -10,11 +10,13 @@ public class GameManager : MonoBehaviour
     public Vector2 MaxPosition { get; private set; }
     public Vector2 MinPosition { get; private set; }
     public PoolManager PoolManager { get; private set; }
+    protected SpriteRenderer spriteRenderer = null;
+
     [SerializeField]
     private Text textScore = null;
+    private int highscore = 0;
     private int score = 0;
     private int life = 3;
-    private SpriteRenderer spriteRenderer = null;
     [SerializeField]
     private Image[] playerHp = null;
 
@@ -24,6 +26,11 @@ public class GameManager : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         MaxPosition = new Vector2(2.5f, 4.5f);
         MinPosition = new Vector2(-2.5f, -5f);
+        highscore = PlayerPrefs.GetInt("HIGHSCORE", 0);
+    }
+    private void Update()
+    {
+        
     }
     public void Dead()
     {
@@ -39,5 +46,20 @@ public class GameManager : MonoBehaviour
     {
         score += addsocre;
         textScore.text = string.Format("Score\n{0}", score);
+        UdateUI();
+    }
+    protected virtual void GameEnd()
+    {
+        SceneManager.LoadScene("GameEnd");
+    }
+    private void UdateUI()
+    {
+
+        PlayerPrefs.SetInt("SCORE",score);
+        if (score > highscore)
+        {
+            highscore = score;
+            PlayerPrefs.SetInt("HIGHSCORE", highscore);
+        }
     }
 }

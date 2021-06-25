@@ -44,7 +44,8 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(2f);
         while (true)
         {
-            if(one>360)
+            
+            if (one>360)
             {
                 one = 0;
             }

@@ -24,13 +24,7 @@ public class Magic : MonoBehaviour
             col.enabled = false;
         }
     }
-    void Start()
-    {
-        
-
-
-        
-    }
+    
 
     // Update is called once per frame
     void Update()
