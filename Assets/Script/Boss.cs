@@ -37,6 +37,8 @@ public class Boss : GameManager
     private bool isMove = false;
     private bool isPhase2 = false;
     private int time = 0;
+    [SerializeField]
+    private float testspeed;
 
     void Start()
     {
@@ -44,7 +46,7 @@ public class Boss : GameManager
         ani = GetComponent<Animator>();
 
 
-
+        
         //StartCoroutine(End());
         StartCoroutine(AddTimeScore(0));
         StartCoroutine(PatternA());
@@ -70,6 +72,7 @@ public class Boss : GameManager
                 isPhase2 = true;
                 GameEnd();
             }
+            speed = 100;
             isMove = true;
             isPhase = true;
             GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
@@ -135,7 +138,7 @@ public class Boss : GameManager
             {
                 bullet = Fire(bullet,0);
                 dir = targetPosition.position - bullet.transform.position;
-                bullet.GetComponent<Rigidbody2D>().AddForce(dir * speed);
+                bullet.GetComponent<Rigidbody2D>().AddForce(dir * 70);
                 yield return new WaitForSeconds(0.3f);
             }
             a++;
@@ -148,9 +151,10 @@ public class Boss : GameManager
     {
         int one = 0;
         int a = 0;
+        speed = 200;
         StartCoroutine(MoveTo(gameObject, new Vector3(0f, 3.7f, 0)));
         oneShoting = 40;
-        while (a<40)
+        while (a<30)
         {
             if (isPhase)
             {
@@ -165,7 +169,7 @@ public class Boss : GameManager
             CircleFire(bullet, oneShoting, one, bulletPosition,2,speed);
             one += 10;
             a++;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.25f);
         }
         yield return new WaitForSeconds(1f);
         StartCoroutine(MoveTo(gameObject, new Vector3(0f, 3.7f, 0)));
@@ -177,6 +181,7 @@ public class Boss : GameManager
         int a = 0;
         oneShoting = 30;
         GameObject bullet = null;
+        speed = 100;
         while (a<20)
         {
             if (isPhase)
@@ -225,6 +230,7 @@ public class Boss : GameManager
         GameObject bullet = null;
         Vector2 dir = new Vector2(0, 0);
         int a = 0;
+        
         yield return new WaitForSeconds(2f);
         while (a <100)
         {
@@ -234,7 +240,7 @@ public class Boss : GameManager
             bullet = Fire(bullet,0);
             bullet.transform.position = new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z);
             dir = targetPosition.position - bullet.transform.position;
-            bullet.GetComponent<Rigidbody2D>().AddForce(dir * 50);
+            bullet.GetComponent<Rigidbody2D>().AddForce(dir * 65);
             yield return new WaitForSeconds(0.1f);
             a++;
         }
@@ -365,12 +371,23 @@ public class Boss : GameManager
         {
             if(isPhase == true&&a==0)
             {
-                if (time < 50)
+                if (time < 45)
                 {
                     if (time < 40)
                     {
                         if (time < 35)
                         {
+                            if (time < 30)
+                            {
+                                if (time < 25)
+                                {
+
+                                    AddScore(2500);
+                                    yield break;
+                                }
+                                AddScore(2000);
+                                yield break;
+                            }
                             AddScore(1500);
                             yield break;
                         }

@@ -28,10 +28,6 @@ public class GameManager : MonoBehaviour
         MinPosition = new Vector2(-2.5f, -5f);
         highscore = PlayerPrefs.GetInt("HIGHSCORE", 0);
     }
-    private void Update()
-    {
-        
-    }
     public void Dead()
     {
         life--;

@@ -37,8 +37,6 @@ public class Player : MonoBehaviour
     {
         I_am();
         Move();
-
-        
     }
     
     private void I_am()

@@ -20,12 +20,6 @@ public class Bullet : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         ani = GetComponent<Animator>();
     }
-    private void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
