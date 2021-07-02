@@ -78,6 +78,7 @@ public class Boss : GameManager
             GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
             for (int i = 0; i < obj.Length; i++)
             {
+                obj[i].GetComponent<Collider2D>().enabled = false;
                 StartCoroutine(obj[i].GetComponent<Bullet>().Srali());
                 AddScore(5);
             }
@@ -179,7 +180,7 @@ public class Boss : GameManager
     {
         int one = 0;
         int a = 0;
-        oneShoting = 30;
+        oneShoting = 25;
         GameObject bullet = null;
         speed = 100;
         while (a<20)
@@ -382,7 +383,7 @@ public class Boss : GameManager
                                 if (time < 25)
                                 {
 
-                                    AddScore(2500);
+                                    AddScore(3000);
                                     yield break;
                                 }
                                 AddScore(2000);

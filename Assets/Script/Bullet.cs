@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour
 { 
     private SpriteRenderer spriteRenderer = null;
     private GameManager gameManager = null;
+    private Collider2D col = null;
     private Animator ani = null;
 
     [SerializeField]
@@ -18,6 +19,7 @@ public class Bullet : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        col = GetComponent<Collider2D>();
         ani = GetComponent<Animator>();
     }
     void Update()
@@ -59,7 +61,7 @@ public class Bullet : MonoBehaviour
     public void SetSprite(int cat)
     {
         spriteRenderer.sprite = sprites[cat];
-       
+        col.enabled = true;
         if (cat == 1)
         {
             gameObject.tag = "Bullet";

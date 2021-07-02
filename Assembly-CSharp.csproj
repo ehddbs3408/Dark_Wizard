@@ -66,9 +66,14 @@
     <Compile Include="Assets\Script\Enemy.cs" />
     <Compile Include="Assets\Script\Bullet.cs" />
     <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\TrackingEnemy.cs" />
   </ItemGroup>
   <ItemGroup>
+     <None Include="Assets\Font\b\README.txt" />
+     <None Include="Assets\Font\OFL.txt" />
      <None Include="Assets\Audio\Dark Future\ReadMe.txt" />
+     <None Include="Assets\Font\a\OFL.txt" />
+     <None Include="Assets\Font\b\OFL.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
