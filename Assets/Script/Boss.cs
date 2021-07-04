@@ -11,7 +11,7 @@ public class Boss : GameManager
     [SerializeField]
     private GameObject bulletPrefab = null;
     [SerializeField]
-    private GameObject enemyPrefab = null;
+    private GameObject[] enemyPrefab = null;
     [SerializeField]
     private GameObject laserObject = null;
     [SerializeField]
@@ -24,7 +24,6 @@ public class Boss : GameManager
     private Slider HpBar = null;
     [SerializeField]
     private float damaged = 0.5f;
-    
     [SerializeField]
     private float moveSpeed = 0.1f;
     [SerializeField]
@@ -45,9 +44,7 @@ public class Boss : GameManager
         gameManager = FindObjectOfType<GameManager>();
         ani = GetComponent<Animator>();
 
-
-        
-        //StartCoroutine(End());
+        //StartCoroutine(TestPattern());
         StartCoroutine(AddTimeScore(0));
         StartCoroutine(PatternA());
     }
@@ -115,6 +112,16 @@ public class Boss : GameManager
             AddScore(10);
         }
         
+    }
+    private IEnumerator TestPattern()
+    {
+        yield return new WaitForSeconds(1f);
+        GameObject bullet = null;
+        while(true)
+        {
+            bullet = Instantiate(enemyPrefab[1],targetPosition);
+            yield return new WaitForSeconds(20f);
+        }
     }
     private IEnumerator PatternA()
     {
@@ -254,7 +261,7 @@ public class Boss : GameManager
         isMove = false;
         StartCoroutine(MoveTo(gameObject, new Vector3(0f, 4.2f, 0)));
         yield return new WaitForSeconds(1f);
-        GameObject prefab = Instantiate(enemyPrefab, bulletPosition);
+        GameObject prefab = Instantiate(enemyPrefab[0], bulletPosition);
         prefab.transform.SetParent(null);
         StartCoroutine(MoveTo(prefab, new Vector3(0f, 0f, 0f)));
         yield return new WaitForSeconds(10f);
@@ -308,8 +315,21 @@ public class Boss : GameManager
         {
             StartCoroutine(PatternE());
         }
+        StartCoroutine(TestPattern());
         
         
+    }
+    private IEnumerator PatternG()
+    {
+        while(true)
+        {
+            StartCoroutine(MoveTo(gameObject, new Vector3(-2, 4.4f, 0)));
+            yield return new WaitForSeconds(1f);
+            for(int i =0;i<50;i++)
+            {
+
+            }
+        }
     }
     private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a,float addspeed)
     {
@@ -353,7 +373,6 @@ public class Boss : GameManager
         Vector3 wasPos = a.transform.position;
         while (true)
         {
-
             count += Time.deltaTime;
             a.transform.position = Vector3.Lerp(wasPos, toPos, count);
 
@@ -421,7 +440,7 @@ public class Boss : GameManager
             }
             yield return new WaitForSeconds(1f);
             time++;
-            Debug.Log(time);
+            //Debug.Log(time);
         }
         
     }
