@@ -44,9 +44,9 @@ public class Boss : GameManager
         gameManager = FindObjectOfType<GameManager>();
         ani = GetComponent<Animator>();
 
-        //StartCoroutine(TestPattern());
-        StartCoroutine(AddTimeScore(0));
-        StartCoroutine(PatternA());
+        StartCoroutine(TestPattern());
+        //StartCoroutine(AddTimeScore(0));
+        //StartCoroutine(PatternA());
     }
     void Update()
     {
@@ -115,12 +115,14 @@ public class Boss : GameManager
     }
     private IEnumerator TestPattern()
     {
+        int a = 0;
         yield return new WaitForSeconds(1f);
         GameObject bullet = null;
-        while(true)
+        while(a<3)
         {
             bullet = Instantiate(enemyPrefab[1],targetPosition);
-            yield return new WaitForSeconds(20f);
+            yield return new WaitForSeconds(5f);
+            a++;
         }
     }
     private IEnumerator PatternA()

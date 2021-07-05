@@ -10,10 +10,8 @@ public class TrackingEnemy : MonoBehaviour
     [SerializeField]
     private Sprite[] sprites = null;
     [SerializeField]
-    private float speed;
-    [SerializeField]
-    private int hp = 100;
-    int a = 1000;
+    private int hp = 15;
+    int time = 1000;
     private bool isStop = false;
     void Start()
     {
@@ -42,13 +40,13 @@ public class TrackingEnemy : MonoBehaviour
     }
     private void Move()
     {
-        transform.Rotate(new Vector3(transform.rotation.x, transform.rotation.y, a * Time.deltaTime));
+        transform.Rotate(new Vector3(transform.rotation.x, transform.rotation.y, time * Time.deltaTime));
     }
     private IEnumerator MoveCount()
     {
         while(true)
         {
-            if(a<=0)
+            if(time <= 0)
             {
                 transform.SetParent(null);
                 isStop = true;
@@ -56,8 +54,8 @@ public class TrackingEnemy : MonoBehaviour
                 yield break;
             }
             yield return new WaitForSeconds(0.001f);
-            a-=2;
-            Debug.Log(a);
+            time -= 7;
+            Debug.Log(time);
         }
     }
     private IEnumerator Attack()
