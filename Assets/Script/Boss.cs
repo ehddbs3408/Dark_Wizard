@@ -32,8 +32,8 @@ public class Boss : GameManager
     private float speed = 0.1f;
     [SerializeField]
     private float oneShoting = 0.5f;
+    private int isMove = 0;
     private bool isPhase = false;
-    private bool isMove = false;
     private bool isPhase2 = false;
     private int time = 0;
     [SerializeField]
@@ -44,13 +44,25 @@ public class Boss : GameManager
         gameManager = FindObjectOfType<GameManager>();
         ani = GetComponent<Animator>();
 
+        //StartCoroutine(PatternG());
         StartCoroutine(TestPattern());
-        //StartCoroutine(AddTimeScore(0));
-        //StartCoroutine(PatternA());
+        StartCoroutine(AddTimeScore(0));
+        StartCoroutine(PatternA());
     }
     void Update()
     {
         Phase_star();
+        switch(isMove)
+        {
+            case 1:
+                PatternDMove();
+                break;
+            case 2:
+                PattermGMove();
+                break;
+            default:
+                break;
+        }
     }
     protected override void AddScore(int addsocre)
     {
@@ -70,7 +82,7 @@ public class Boss : GameManager
                 GameEnd();
             }
             speed = 100;
-            isMove = true;
+            isMove = 1;
             isPhase = true;
             GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
             for (int i = 0; i < obj.Length; i++)
@@ -85,22 +97,20 @@ public class Boss : GameManager
             }
             StartCoroutine(PatternD());
             StartCoroutine(AddTimeScore(1));
-                damaged -= 0.15f;
-                
-            
+            damaged -= 0.15f;
         }
-        if(isMove)
-        {
-            
-            Phase_2Move();
-        }
-
     }
-    private void Phase_2Move()
+    private void PatternDMove()
     {
         float x = Mathf.Cos(Time.time * 1) * 2;
         float y = Mathf.Sin(Time.time *2) * 1;
         transform.position = new Vector3(x, y + 2.5f, 0);
+    }
+    private void PattermGMove()
+    {
+        float x = Mathf.Cos(Time.time * 3) * 3.5f; //fMathf.Cos(speed) * Area
+        float y = Mathf.Sin(Time.time * 3) * 3.5f;
+        transform.position = new Vector3(x, y , 0);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -146,13 +156,16 @@ public class Boss : GameManager
             StartCoroutine(MoveTo(gameObject, new Vector3(randomX, randomY, 0)));
             for (int i = 0;i<15;i++)
             {
+                
                 bullet = Fire(bullet,0);
                 dir = targetPosition.position - bullet.transform.position;
                 bullet.GetComponent<Rigidbody2D>().AddForce(dir * 70);
                 yield return new WaitForSeconds(0.3f);
+                
             }
             a++;
             yield return new WaitForSeconds(0.5f);
+            
         }
         StartCoroutine(PatternB());
 
@@ -260,7 +273,7 @@ public class Boss : GameManager
     }
     private IEnumerator PatternE()
     {
-        isMove = false;
+        isMove = 0;
         StartCoroutine(MoveTo(gameObject, new Vector3(0f, 4.2f, 0)));
         yield return new WaitForSeconds(1f);
         GameObject prefab = Instantiate(enemyPrefab[0], bulletPosition);
@@ -275,10 +288,7 @@ public class Boss : GameManager
         int b = 0;
         float randomX = 0f;
         float randomY = 0f;
-        int randPattern = 0;
-        randPattern = Random.Range(1, 2);
-
-
+        
         GameObject bullet =null;
         while (a<4)
         {
@@ -308,30 +318,33 @@ public class Boss : GameManager
         }
         laserObject.GetComponent<Collider2D>().enabled = false;
         laserObject.GetComponent<SpriteRenderer>().enabled = false;
-        if (randPattern==1)
-        {
-            isMove = true;
-            StartCoroutine(PatternD());
-        }
-        else
-        {
-            StartCoroutine(PatternE());
-        }
-        StartCoroutine(TestPattern());
-        
-        
+        StartCoroutine(PatternG());
     }
     private IEnumerator PatternG()
     {
-        while(true)
+        isMove = 2;
+        GameObject bullet = null;
+        Vector3 dir = new Vector3(0, 0,0);
+        int a = 0;
+        yield return new WaitForSeconds(1f);
+        while (a<20)
         {
-            StartCoroutine(MoveTo(gameObject, new Vector3(-2, 4.4f, 0)));
-            yield return new WaitForSeconds(1f);
-            for(int i =0;i<50;i++)
-            {
-
-            }
+            bullet = Fire(bullet, 0);
+            CircleFire(bullet, 20, 0, bulletPosition, 2, 150);
+            yield return new WaitForSeconds(0.5f);
+            a++;
         }
+        isMove = 0;
+        StartCoroutine(MoveTo(gameObject, new Vector3(0f, 3.7f, 0)));
+        yield return new WaitForSeconds(4f);
+        GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
+        for (int i = 0; i < obj.Length; i++)
+        {
+            dir = targetPosition.position - obj[i].transform.position;
+            obj[i].GetComponent<Rigidbody2D>().AddForce(dir * 50);
+        }
+        
+
     }
     private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a,float addspeed)
     {

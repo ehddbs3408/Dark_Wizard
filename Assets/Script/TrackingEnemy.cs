@@ -46,6 +46,7 @@ public class TrackingEnemy : MonoBehaviour
     {
         while(true)
         {
+
             if(time <= 0)
             {
                 transform.SetParent(null);
@@ -54,7 +55,7 @@ public class TrackingEnemy : MonoBehaviour
                 yield break;
             }
             yield return new WaitForSeconds(0.001f);
-            time -= 7;
+            time -= 2;
             Debug.Log(time);
         }
     }
