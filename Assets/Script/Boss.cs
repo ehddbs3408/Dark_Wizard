@@ -44,8 +44,7 @@ public class Boss : GameManager
         gameManager = FindObjectOfType<GameManager>();
         ani = GetComponent<Animator>();
 
-        //StartCoroutine(PatternG());
-        StartCoroutine(TestPattern());
+       
         StartCoroutine(AddTimeScore(0));
         StartCoroutine(PatternA());
     }
@@ -123,7 +122,7 @@ public class Boss : GameManager
         }
         
     }
-    private IEnumerator TestPattern()
+    private IEnumerator PatternMagic()
     {
         int a = 0;
         yield return new WaitForSeconds(1f);
@@ -251,6 +250,7 @@ public class Boss : GameManager
     private IEnumerator PatternD()
     {
         GameObject bullet = null;
+        float x, y;
         Vector2 dir = new Vector2(0, 0);
         int a = 0;
         
@@ -258,8 +258,8 @@ public class Boss : GameManager
         while (a <100)
         {
             if (isPhase == false) continue; 
-            float x = Mathf.Cos(Time.time * moveSpeed) * moveArea;
-            float y = Mathf.Sin(Time.time * moveSpeed) * moveArea;
+            x = Mathf.Cos(Time.time * moveSpeed) * moveArea;
+            y = Mathf.Sin(Time.time * moveSpeed) * moveArea;
             bullet = Fire(bullet,0);
             bullet.transform.position = new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z);
             dir = targetPosition.position - bullet.transform.position;
@@ -322,11 +322,47 @@ public class Boss : GameManager
     }
     private IEnumerator PatternG()
     {
-        isMove = 2;
+        GameObject bullet = null;
+        int a = 0;
+        float x, y;
+        float randomX = 0f;
+        float randomY = 0f;
+        Vector3 dir = new Vector3(0, 0, 0);
+        StartCoroutine(PatternMagic());
+        while (a<10)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                x = Mathf.Cos(Time.time * 6) * 2f;
+                y = Mathf.Sin(Time.time * 6) * 2f;
+                bullet = Fire(bullet, 0);
+                bullet.transform.position = new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z);
+                yield return new WaitForSeconds(0.05f);
+            }
+            yield return new WaitForSeconds(0.5f);
+            GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
+            for (int i = 0; i < obj.Length; i++)
+            {
+                dir = targetPosition.position - obj[i].transform.position;
+                obj[i].GetComponent<Rigidbody2D>().AddForce(dir * 70);
+            }
+            randomX = Random.Range(-1.7f, 1.7f);
+            randomY = Random.Range(1, 4f);
+            CircleFire(bullet, 30, 0, bulletPosition, 4, 80);
+            StartCoroutine(MoveTo(gameObject, new Vector3(randomX, randomY, 0)));
+            yield return new WaitForSeconds(0.7f);
+            a++;
+        }
+        StartCoroutine(PatternH());
+    }
+    private IEnumerator PatternH()
+    {
+        
         GameObject bullet = null;
         Vector3 dir = new Vector3(0, 0,0);
         int a = 0;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
+        isMove = 2;
         while (a<20)
         {
             bullet = Fire(bullet, 0);
@@ -343,9 +379,9 @@ public class Boss : GameManager
             dir = targetPosition.position - obj[i].transform.position;
             obj[i].GetComponent<Rigidbody2D>().AddForce(dir * 50);
         }
-        
-
+        StartCoroutine(PatternD());
     }
+    
     private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a,float addspeed)
     {
         for (int i = 0; i < oneShoting; i++)

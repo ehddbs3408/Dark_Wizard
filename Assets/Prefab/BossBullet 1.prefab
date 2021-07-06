@@ -140,6 +140,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0fa9146494d516041b71dbaba94d39c2, type: 3}
   - {fileID: -8766916924698303176, guid: 73831d0fabde9054ca1ecc213d2e4ff9, type: 3}
   - {fileID: -3074390990852479285, guid: 70eb427dbf4047640aa70d692b634b36, type: 3}
+  - {fileID: 4473937882872290755, guid: 73831d0fabde9054ca1ecc213d2e4ff9, type: 3}
   speed: 0
 --- !u!95 &-1222498198104645959
 Animator:

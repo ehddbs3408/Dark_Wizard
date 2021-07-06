@@ -72,13 +72,16 @@ public class Bullet : MonoBehaviour
         else
         {
             transform.eulerAngles = new Vector3(transform.rotation.x, transform.rotation.y, 0f);
-            gameObject.tag = "Bullet_E";
+            if(cat==4)
+            {
+                gameObject.tag = "Bullet_E_1";
+            }
+            else
+            {
+                gameObject.tag = "Bullet_E";
+            }
             gameObject.layer = 7;
             speed = 0;
         }
-            
-       
     }
-    
-
 }

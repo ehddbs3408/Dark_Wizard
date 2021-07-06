@@ -1155,7 +1155,7 @@ ScriptsOnlyBuild:
     className: BeforeAfterTestCommandState
   - hash:
       serializedVersion: 2
-      Hash: 2082c2dff02401ab0b55a6efc0224b99
+      Hash: 1d8fde643cd16d7cbfe169cbac5add41
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TrackingEnemy
@@ -1405,4 +1405,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Main.unity
   - Assets/Scenes/GameOver.unity
   - Assets/Scenes/GameEnd.unity
-  playerPath: C:/Users/USER/Desktop/DarkWizard(1.0).apk
+  playerPath: C:/Users/USER/Desktop/DarkWizard(1.1).apk

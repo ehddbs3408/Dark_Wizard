@@ -102,8 +102,7 @@ MonoBehaviour:
   - {fileID: 6750601069584661246, guid: 97b52783e6d4ac44eb1f2626a50649f3, type: 3}
   - {fileID: 6520052324068829114, guid: 97b52783e6d4ac44eb1f2626a50649f3, type: 3}
   - {fileID: -3740245923217782965, guid: 97b52783e6d4ac44eb1f2626a50649f3, type: 3}
-  speed: 5
-  hp: 30
+  hp: 10
 --- !u!68 &3319838097884717293
 EdgeCollider2D:
   m_ObjectHideFlags: 0

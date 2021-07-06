@@ -10,7 +10,7 @@ public class TrackingEnemy : MonoBehaviour
     [SerializeField]
     private Sprite[] sprites = null;
     [SerializeField]
-    private int hp = 15;
+    private int hp = 10;
     int time = 1000;
     private bool isStop = false;
     void Start()
@@ -55,8 +55,7 @@ public class TrackingEnemy : MonoBehaviour
                 yield break;
             }
             yield return new WaitForSeconds(0.001f);
-            time -= 2;
-            Debug.Log(time);
+            time -= 7;
         }
     }
     private IEnumerator Attack()
