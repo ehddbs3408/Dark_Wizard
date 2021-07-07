@@ -129,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 2988745924038608571, guid: 87feab4208ab88d4bbde5d6c823efffc, type: 3}
   bulletPosition: {fileID: 2633932495044394242}
-  hp: 40
+  hp: 35
   speed: 200
 --- !u!58 &967509981721923859
 CircleCollider2D:
