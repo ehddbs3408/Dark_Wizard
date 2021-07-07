@@ -305,11 +305,11 @@ public class Boss : GameManager
             }
             laserObject.GetComponent<Magic>().Changesprite(2);
             laserObject.GetComponent<Collider2D>().enabled = true;
-            for (int i = 0;i<5;i++)
+            for (int i = 0;i<6;i++)
             {
-                CircleFire(bullet, 25, b, bulletPosition, 0,130);
-                b += 10;
-                yield return new WaitForSeconds(0.2f);
+                CircleFire(bullet, 30, b, bulletPosition, 0,130);
+                b += 15;
+                yield return new WaitForSeconds(0.3f);
             }
             
             yield return new WaitForSeconds(2f);
@@ -346,6 +346,7 @@ public class Boss : GameManager
             {
                 dir = targetPosition.position - obj[i].transform.position;
                 obj[i].GetComponent<Rigidbody2D>().AddForce(dir * 70);
+                obj[i].gameObject.tag = "Bullet_E_1";
             }
             randomX = Random.Range(-1.7f, 1.7f);
             randomY = Random.Range(1, 4f);
@@ -385,7 +386,6 @@ public class Boss : GameManager
         yield return new WaitForSeconds(2f);
         StartCoroutine(PatternD());
     }
-    
     private void CircleFire(GameObject bullet,float oneShoting,int one,Transform bulletPosition,int a,float addspeed)
     {
         for (int i = 0; i < oneShoting; i++)
@@ -476,12 +476,32 @@ public class Boss : GameManager
             }
             if(isPhase2==true&&a==1)
             {
-                if (time < 100)
+                if (time < 140)
                 {
-                    if (time < 95)
+                    if (time < 130)
                     {
-                        if (time < 85)
+                        if (time < 120)
                         {
+                            if (time < 110)
+                            {
+                                if (time < 100)
+                                {
+                                    if (time < 95)
+                                    {
+                                        if (time < 90)
+                                        {
+                                            AddScore(7000);
+                                            yield break;
+                                        }
+                                        AddScore(6000);
+                                        yield break;
+                                    }
+                                    AddScore(5000);
+                                    yield break;
+                                }
+                                AddScore(4000);
+                                yield break;
+                            }
                             AddScore(3000);
                             yield break;
                         }
