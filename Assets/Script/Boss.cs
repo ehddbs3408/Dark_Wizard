@@ -44,13 +44,13 @@ public class Boss : GameManager
         gameManager = FindObjectOfType<GameManager>();
         ani = GetComponent<Animator>();
 
-       
-        StartCoroutine(AddTimeScore(0));
-        StartCoroutine(PatternA());
+        StartCoroutine(PatternG());
+        //StartCoroutine(AddTimeScore(0));
+        //StartCoroutine(PatternA());
     }
     void Update()
     {
-        Phase_star();
+        //Phase_star();
         switch(isMove)
         {
             case 1:
@@ -330,22 +330,22 @@ public class Boss : GameManager
         StartCoroutine(MoveTo(gameObject, new Vector3(0f, 3.7f, 0)));
         yield return new WaitForSeconds(1f);
         StartCoroutine(PatternMagic());
-        while (a<10)
+        while (a<15)
         {
             for (int i = 0; i < 20; i++)
             {
-                x = Mathf.Cos(Time.time * 6) * 2f;
-                y = Mathf.Sin(Time.time * 6) * 2f;
+                x = Mathf.Cos(Time.time * 16) * 2f;
+                y = Mathf.Sin(Time.time * 16) * 2f;
                 bullet = Fire(bullet, 0);
                 bullet.transform.position = new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z);
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.02f);
             }
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             GameObject[] obj = GameObject.FindGameObjectsWithTag("Bullet_E");
             for (int i = 0; i < obj.Length; i++)
             {
                 dir = targetPosition.position - obj[i].transform.position;
-                obj[i].GetComponent<Rigidbody2D>().AddForce(dir * 70);
+                obj[i].GetComponent<Rigidbody2D>().AddForce(dir * 90);
                 obj[i].gameObject.tag = "Bullet_E_1";
             }
             randomX = Random.Range(-1.7f, 1.7f);
@@ -370,7 +370,7 @@ public class Boss : GameManager
         while (a<20)
         {
             bullet = Fire(bullet, 0);
-            CircleFire(bullet, 20, 0, bulletPosition, 2, 150);
+            CircleFire(bullet, 25, 0, bulletPosition, 2, 150);
             yield return new WaitForSeconds(0.5f);
             a++;
         }
@@ -490,6 +490,21 @@ public class Boss : GameManager
                                     {
                                         if (time < 90)
                                         {
+                                            if (time < 85)
+                                            {
+                                                if (time < 80)
+                                                {
+                                                    if (time < 75)
+                                                    {
+                                                        AddScore(10000);
+                                                        yield break;
+                                                    }
+                                                    AddScore(9000);
+                                                    yield break;
+                                                }
+                                                AddScore(8000);
+                                                yield break;
+                                            }
                                             AddScore(7000);
                                             yield break;
                                         }
