@@ -36,11 +36,16 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("GameOver");
             return;
         }
+        AddScore(-1000);
         playerHp[life].color = new Color(1, 1, 1, 0);
     }
     protected virtual void AddScore(int addsocre)
     {
         score += addsocre;
+        if(score<=0)
+        {
+            score = 0;
+        }
         textScore.text = string.Format("Score\n{0}", score);
         UdateUI();
     }

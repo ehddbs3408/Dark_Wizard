@@ -412,6 +412,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 196
       Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
     - Class: 222
@@ -1405,4 +1407,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Main.unity
   - Assets/Scenes/GameOver.unity
   - Assets/Scenes/GameEnd.unity
-  playerPath: C:/Users/USER/Desktop/DarkWizard(1.1).apk
+  playerPath: C:/Users/USER/Desktop/DarkWizard.apk

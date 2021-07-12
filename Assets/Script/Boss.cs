@@ -44,13 +44,12 @@ public class Boss : GameManager
         gameManager = FindObjectOfType<GameManager>();
         ani = GetComponent<Animator>();
 
-        StartCoroutine(PatternG());
-        //StartCoroutine(AddTimeScore(0));
-        //StartCoroutine(PatternA());
+        StartCoroutine(AddTimeScore(0));
+        StartCoroutine(PatternA());
     }
     void Update()
     {
-        //Phase_star();
+        Phase_star();
         switch(isMove)
         {
             case 1:
