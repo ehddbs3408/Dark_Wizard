@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Vector2 MaxPosition { get; private set; }
     public Vector2 MinPosition { get; private set; }
     public PoolManager PoolManager { get; private set; }
+
     protected SpriteRenderer spriteRenderer = null;
 
     [SerializeField]
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         PoolManager = FindObjectOfType<PoolManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
         MaxPosition = new Vector2(2.5f, 4.5f);
         MinPosition = new Vector2(-2.5f, -5f);
         highscore = PlayerPrefs.GetInt("HIGHSCORE", 0);
@@ -55,7 +57,6 @@ public class GameManager : MonoBehaviour
     }
     private void UdateUI()
     {
-
         PlayerPrefs.SetInt("SCORE",score);
         if (score > highscore)
         {
