@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
     
     // Start is called before the first frame update
@@ -22,22 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Image[] playerHp = null;
 
-    private static GameManager instance = null;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<GameManager>();
-                if (instance == null)
-                {
-                    instance = new GameObject("GameManager").AddComponent<GameManager>();
-                }
-            }
-            return instance;
-        }
-    }
+    
     private void Awake()
     {
         PoolManager = FindObjectOfType<PoolManager>();
