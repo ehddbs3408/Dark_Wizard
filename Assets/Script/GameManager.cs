@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    
     // Start is called before the first frame update
     public Vector2 MaxPosition { get; private set; }
     public Vector2 MinPosition { get; private set; }
@@ -21,6 +22,22 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Image[] playerHp = null;
 
+    private static GameManager instance = null;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<GameManager>();
+                if (instance == null)
+                {
+                    instance = new GameObject("GameManager").AddComponent<GameManager>();
+                }
+            }
+            return instance;
+        }
+    }
     private void Awake()
     {
         PoolManager = FindObjectOfType<PoolManager>();
